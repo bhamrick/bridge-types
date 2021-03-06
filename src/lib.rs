@@ -1,6 +1,8 @@
+use serde::{Serialize, Deserialize};
+
 use std::cmp::Ordering;
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Suit {
     Spades,
     Hearts,
@@ -37,7 +39,7 @@ impl PartialOrd for Suit {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Strain {
     NoTrump,
     Suit(Suit),
@@ -66,7 +68,7 @@ impl std::convert::From<Suit> for Strain {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Seat {
     North,
     East,
@@ -94,13 +96,13 @@ impl Seat {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Side {
     NS,
     EW,
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct Holding(pub u32);
 
 impl Holding {
@@ -201,7 +203,7 @@ impl std::iter::DoubleEndedIterator for HoldingIterator {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct PerSuit<T> {
     pub spades: T,
     pub hearts: T,
@@ -298,7 +300,7 @@ impl<'a, T> Iterator for PerSuitIter<'a, T> {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct PerSeat<T> {
     pub north: T,
     pub east: T,
@@ -361,7 +363,7 @@ impl<T> std::ops::IndexMut<Seat> for PerSeat<T> {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct PerStrain<T> {
     pub notrump: T,
     pub spades: T,
@@ -408,7 +410,7 @@ impl<T> std::ops::IndexMut<Strain> for PerStrain<T> {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct PerSide<T> {
     pub ns: T,
     pub ew: T,
@@ -443,7 +445,7 @@ impl<T> std::ops::IndexMut<Side> for PerSide<T> {
     }
 }
 
-#[derive(Debug, Copy, Clone, Eq, PartialEq)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Serialize, Deserialize)]
 pub struct Contract {
     pub level: u8,
     pub strain: Strain,
@@ -469,14 +471,14 @@ impl std::fmt::Display for Contract {
     }
 }
 
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Doubling {
     Undoubled,
     Doubled,
     Redoubled,
 }
 
-#[derive(Debug, Copy, Clone, Eq, PartialEq)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Serialize, Deserialize)]
 pub enum Call {
     Pass,
     Bid(u8, Strain),
