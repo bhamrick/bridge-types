@@ -86,6 +86,15 @@ impl Seat {
         }
     }
 
+    pub fn partner(self) -> Self {
+        match self {
+            Seat::North => Seat::South,
+            Seat::East => Seat::West,
+            Seat::South => Seat::North,
+            Seat::West => Seat::East,
+        }
+    }
+
     pub fn side(self) -> Side {
         match self {
             Seat::North => Side::NS,
@@ -240,6 +249,15 @@ impl<T> PerSuit<T> {
             clubs: f(self.clubs),
         }
     }
+
+    pub fn map_with_suit<S, F: Fn(Suit, T) -> S>(self, f: F) -> PerSuit<S> {
+        PerSuit {
+            spades: f(Suit::Spades, self.spades),
+            hearts: f(Suit::Hearts, self.hearts),
+            diamonds: f(Suit::Diamonds, self.diamonds),
+            clubs: f(Suit::Clubs, self.clubs),
+        }
+    }
     
     pub fn iter<'a>(&'a self) -> PerSuitIter<'a, T> {
         PerSuitIter {
@@ -337,6 +355,22 @@ impl<T> PerSeat<T> {
             west: f(self.west),
         }
     }
+
+    pub fn map_with_seat<S, F: Fn(Seat, T) -> S>(self, f: F) -> PerSeat<S> {
+        PerSeat {
+            north: f(Seat::North, self.north),
+            east: f(Seat::East, self.east),
+            south: f(Seat::South, self.south),
+            west: f(Seat::West, self.west),
+        }
+    }
+
+    pub fn iter<'a>(&'a self) -> PerSeatIter<'a, T> {
+        PerSeatIter {
+            source: self,
+            index: Some(Seat::North),
+        }
+    }
 }
 
 impl<T> std::ops::Index<Seat> for PerSeat<T> {
@@ -360,6 +394,27 @@ impl<T> std::ops::IndexMut<Seat> for PerSeat<T> {
             Seat::South => &mut self.south,
             Seat::West => &mut self.west,
         }
+    }
+}
+
+pub struct PerSeatIter<'a, T> {
+    source: &'a PerSeat<T>,
+    index: Option<Seat>,
+}
+
+impl<'a, T> Iterator for PerSeatIter<'a, T> {
+    type Item = &'a T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let ret = self.index.map(|idx| &self.source[idx]);
+        self.index = match self.index {
+            Some(Seat::North) => Some(Seat::East),
+            Some(Seat::East) => Some(Seat::South),
+            Some(Seat::South) => Some(Seat::West),
+            Some(Seat::West) => None,
+            None => None,
+        };
+        ret
     }
 }
 
@@ -485,6 +540,9 @@ pub enum Call {
     Double,
     Redouble,
 }
+
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Serialize, Deserialize)]
+pub struct Card(pub u32, pub Suit);
 
 #[cfg(test)]
 mod tests {
