@@ -76,6 +76,14 @@ pub enum Seat {
     West,
 }
 
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum SeatRelation {
+    Me,
+    LHO,
+    Partner,
+    RHO,
+}
+
 impl Seat {
     pub fn next(self) -> Self {
         match self {
@@ -101,6 +109,18 @@ impl Seat {
             Seat::East => Side::EW,
             Seat::South => Side::NS,
             Seat::West => Side::EW,
+        }
+    }
+
+    pub fn relation_to(self, other: Seat) -> SeatRelation {
+        if self == other {
+            SeatRelation::Me
+        } else if self == other.next() {
+            SeatRelation::LHO
+        } else if self == other.partner() {
+            SeatRelation::Partner
+        } else {
+            SeatRelation::RHO
         }
     }
 }
