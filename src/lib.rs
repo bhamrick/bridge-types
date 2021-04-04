@@ -520,7 +520,7 @@ impl<T> std::ops::IndexMut<Side> for PerSide<T> {
     }
 }
 
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
 pub struct Contract {
     pub level: u8,
     pub strain: Strain,
@@ -553,7 +553,7 @@ pub enum Doubling {
     Redoubled,
 }
 
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
 pub enum Call {
     Pass,
     Bid(u8, Strain),
@@ -561,7 +561,7 @@ pub enum Call {
     Redouble,
 }
 
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash, Serialize, Deserialize)]
 pub struct Card(pub u32, pub Suit);
 
 #[cfg(test)]
