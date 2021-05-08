@@ -85,6 +85,9 @@ pub enum SeatRelation {
 }
 
 impl Seat {
+    /// Next player in play order.
+    ///
+    /// Same as [lho].
     pub fn next(self) -> Self {
         match self {
             Seat::North => Seat::East,
@@ -94,12 +97,35 @@ impl Seat {
         }
     }
 
+    /// Partner.
     pub fn partner(self) -> Self {
         match self {
             Seat::North => Seat::South,
             Seat::East => Seat::West,
             Seat::South => Seat::North,
             Seat::West => Seat::East,
+        }
+    }
+
+    /// Left hand opponent.
+    ///
+    /// Same as [next].
+    pub fn lho(self) -> Self {
+        match self {
+            Seat::North => Seat::East,
+            Seat::East => Seat::South,
+            Seat::South => Seat::West,
+            Seat::West => Seat::North,
+        }
+    }
+
+    /// Right hand opponent.
+    pub fn rho(self) -> Self {
+        match self {
+            Seat::North => Seat::West,
+            Seat::East => Seat::North,
+            Seat::South => Seat::East,
+            Seat::West => Seat::South,
         }
     }
 
@@ -129,6 +155,15 @@ impl Seat {
 pub enum Side {
     NS,
     EW,
+}
+
+impl Side {
+    pub fn opponents(self) -> Side {
+        match self {
+            Side::NS => Side::EW,
+            Side::EW => Side::NS,
+        }
+    }
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -278,7 +313,7 @@ impl<T> PerSuit<T> {
             clubs: f(Suit::Clubs, self.clubs),
         }
     }
-    
+
     pub fn iter<'a>(&'a self) -> PerSuitIter<'a, T> {
         PerSuitIter {
             source: self,
