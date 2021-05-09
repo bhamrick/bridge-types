@@ -535,6 +535,15 @@ impl<T: Copy> PerSide<T> {
     }
 }
 
+impl<T> PerSide<T> {
+    pub fn map<S, F: Fn(T) -> S>(self, f: F) -> PerSide<S> {
+        PerSide{
+            ns: f(self.ns),
+            ew: f(self.ew),
+        }
+    }
+}
+
 impl<T> std::ops::Index<Side> for PerSide<T> {
     type Output = T;
 
