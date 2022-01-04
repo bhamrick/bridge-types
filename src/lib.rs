@@ -87,7 +87,7 @@ pub enum SeatRelation {
 impl Seat {
     /// Next player in play order.
     ///
-    /// Same as [lho].
+    /// Same as [Self::lho].
     pub fn next(self) -> Self {
         match self {
             Seat::North => Seat::East,
@@ -109,7 +109,7 @@ impl Seat {
 
     /// Left hand opponent.
     ///
-    /// Same as [next].
+    /// Same as [Self::next].
     pub fn lho(self) -> Self {
         match self {
             Seat::North => Seat::East,
