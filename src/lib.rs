@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 use std::cmp::Ordering;
 
@@ -217,7 +217,7 @@ impl std::iter::IntoIterator for Holding {
 }
 
 impl std::iter::FromIterator<u32> for Holding {
-    fn from_iter<I: IntoIterator<Item=u32>>(iter: I) -> Self {
+    fn from_iter<I: IntoIterator<Item = u32>>(iter: I) -> Self {
         let mut holding = Holding::new();
 
         for i in iter {
@@ -322,7 +322,7 @@ impl<T> PerSuit<T> {
     }
 }
 
-impl<T: std::ops::Add<T, Output=T>> PerSuit<T> {
+impl<T: std::ops::Add<T, Output = T>> PerSuit<T> {
     pub fn sum(self) -> T {
         self.spades + self.hearts + self.diamonds + self.clubs
     }
@@ -537,7 +537,7 @@ impl<T: Copy> PerSide<T> {
 
 impl<T> PerSide<T> {
     pub fn map<S, F: Fn(T) -> S>(self, f: F) -> PerSide<S> {
-        PerSide{
+        PerSide {
             ns: f(self.ns),
             ew: f(self.ew),
         }
@@ -573,20 +573,23 @@ pub struct Contract {
 
 impl std::fmt::Display for Contract {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}{}{}",
-               self.level,
-               match self.strain {
-                   Strain::NoTrump => "NT",
-                   Strain::Suit(Suit::Spades) => "S",
-                   Strain::Suit(Suit::Hearts) => "H",
-                   Strain::Suit(Suit::Diamonds) => "D",
-                   Strain::Suit(Suit::Clubs) => "C",
-               },
-               match self.doubling {
-                   Doubling::Undoubled => "",
-                   Doubling::Doubled => "x",
-                   Doubling::Redoubled => "xx",
-               })
+        write!(
+            f,
+            "{}{}{}",
+            self.level,
+            match self.strain {
+                Strain::NoTrump => "NT",
+                Strain::Suit(Suit::Spades) => "S",
+                Strain::Suit(Suit::Hearts) => "H",
+                Strain::Suit(Suit::Diamonds) => "D",
+                Strain::Suit(Suit::Clubs) => "C",
+            },
+            match self.doubling {
+                Doubling::Undoubled => "",
+                Doubling::Doubled => "x",
+                Doubling::Redoubled => "xx",
+            }
+        )
     }
 }
 
